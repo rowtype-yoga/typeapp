@@ -26,16 +26,22 @@
             src.path = inputs.option;
             info.dependencies = [ "aff" "argonaut-codecs" "argonaut-core"    "codec" "codec-argonaut" "datetime" "effect" "either" "enums" "foldable-traversable" "foreign" "foreign-object" "functors" "identity" "lists" "maybe" "prelude" "record" "simple-json" "spec" "transformers" "tuples" "unsafe-coerce"];
           };
+          dependencies = 
+            with purs-nix.ps-pkgs;
+            [
+              prelude
+              option
+            ];
+          typeapp = purs-nix.build {
+            name = "typeapp";
+            src.path = ./.;
+            info = { inherit dependencies; };
+          };
           ps =
             purs-nix.purs
               {
                 dir = ./.;
-                dependencies =
-                  with purs-nix.ps-pkgs;
-                  [
-                    prelude
-                    option
-                  ];
+                inherit dependencies;
                 inherit purescript nodejs;
               };
           # helpers
@@ -51,7 +57,7 @@
           };
         in 
          {
-          packages.default = ps.output { };
+          packages.default = typeapp;
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
