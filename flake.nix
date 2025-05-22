@@ -51,7 +51,7 @@
           };
         in 
          {
-          packages.default = ps.bundle { };
+          packages.default = ps.output { };
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
